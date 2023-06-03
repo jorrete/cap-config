@@ -155,9 +155,13 @@ function getCustomConfig(origin) {
     generateAssets(options = {}) {
       customConfig?.generateAssets(getOptions(options));
     },
-    getLivePort(options = {}) {
-      customConfig?.getLivePort(getOptions(options));
-    },
+    getLivePort: (
+      customConfig.getLivePort
+        ? (options = {}) => {
+          return customConfig?.getLivePort(getOptions(options));
+        }
+        : undefined
+    ),
   };
 }
 
