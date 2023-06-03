@@ -18,7 +18,7 @@ appRoot.setPath(process.cwd());
 
 const customConfig = getCustomConfig(appRoot.path);
 
-if (process.env.CAPACITOR_SPINOFF) {
+if (process.env.CAPACITOR_SPINOFF || process.env.CAPACITOR_LIVE === 'true') {
   return;
 }
 
