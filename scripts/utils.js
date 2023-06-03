@@ -177,15 +177,16 @@ function run(command, options = {}) {
 }
 
 function liveServer(path, port, status) {
-  if (port) {
-    return;
-  }
-
   const platform = process.env.CAPACITOR_PLATFORM_NAME;
 
   if (!platform) {
     throw Error(`Cant generate assets for: ${platform}`);
   }
+
+  if (!port) {
+    throw Error('Missing port');
+  }
+
 
   if (status) {
     updateCapacitorConfig(resolve(path, capacitorPlatform[platform]), {
