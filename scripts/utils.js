@@ -173,6 +173,10 @@ function run(command, options = {}) {
 }
 
 function liveServer(path, port, status) {
+  if (port) {
+    return;
+  }
+
   const platform = process.env.CAPACITOR_PLATFORM_NAME;
 
   if (!platform) {
