@@ -1,0 +1,19 @@
+{
+  "name": "cap-config",
+  "version": "0.1.0",
+  "bin": {
+    "cap-copy-before": "./scripts/before.js",
+    "cap-copy-after": "./scripts/after.js",
+    "cap-spinoff": "./scripts/spinOff.js"
+  },
+  "peerDependencies": {
+    "@capacitor/cli": "*",
+    "@capacitor/core": "*"
+  },
+  "dependencies": {
+    "app-root-path": "^3.1.0",
+    "glob": "^10.2.6",
+    "ip": "^1.1.8",
+    "load-json-file": "^7.0.1"
+  }
+}

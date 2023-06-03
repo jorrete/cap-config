@@ -1,0 +1,43 @@
+/* @import '@ionic/core/css/ionic.bundle.css'; */
+html {
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+html:not([ready]) {
+  visibility: hidden;
+}
+
+body {
+  top: var(--statusbar-height, 0);
+}
+
+html[theme="light"] > body {
+  background-color: white;
+  color: black;
+}
+
+html[theme="dark"] > body {
+  background-color: black;
+  color: white;
+}
+
+.content {
+  flex: auto;
+}
+
+.bottom {
+  background: red;
+}
