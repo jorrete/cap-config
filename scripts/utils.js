@@ -138,7 +138,8 @@ function getCustomConfig(origin) {
   const customConfig = requireSafe(resolve(origin, 'capacitor.custom.config.js'));
   const config = customConfig.config || {};
   const spinOffs = customConfig.spinOffs || {};
-  const destination = origin;
+
+  let destination = origin;
 
   const getOptions = (options = {}) => {
     const platform = process.env.CAPACITOR_PLATFORM_NAME;
@@ -170,8 +171,8 @@ function getCustomConfig(origin) {
     origin,
     config,
     spinOffs,
-    getDestinationDirectory(options = {}) {
-      return customConfig.getDestinationDirectory?.(getOptions(options)) || options?.destination || destination;
+    getSpinOffDirectory(destination, spinOff) {
+      return customConfig.getSpinOffDirectory?.(destination, spinOff) || destination;
     },
     getConfig(options = {}) {
       options = getOptions(options);

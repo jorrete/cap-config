@@ -42,7 +42,7 @@ spinOffs.forEach(([
   id,
   spinOff,
 ]) => {
-  let destination =resolve(spinOffsDir, id);
+  const destination = customConfig.getSpinOffDirectory(resolve(spinOffsDir, id), spinOff);
 
   if (!fs.existsSync(destination)) {
     fs.mkdirSync(destination);

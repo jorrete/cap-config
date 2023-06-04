@@ -30,6 +30,10 @@ module.exports = {
   build(options) {
     run(`npx vite build --emptyOutDir --outDir ${options.destination}/dist`);
   },
+  getSpinOffDirectory(destination, spinOff) {
+    void spinOff;
+    return destination;
+  },
   spinOffs: {
     'test': {
       data: {
