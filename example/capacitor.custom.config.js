@@ -44,22 +44,7 @@ module.exports = {
         'mongo': 'farto',
       },
       capacitorConfig: {
-        'appId': 'com.example.xxxxfarto',
-        'appName': 'Vite!!',
-        'webDir': 'dist',
-        'bundledWebRuntime': false,
-        'backgroundColor': '#8a1b1b',
-        'plugins': {
-          'Keyboard': {
-            'resize': 'body',
-            'resizeOnFullScreen': true,
-          },
-        },
-        'cordova': {
-          'preferences': {
-            'StatusBarBackgroundColor': '#8a1b1b',
-          },
-        },
+        'appName': 'FARTO',
       },
     },
   },
