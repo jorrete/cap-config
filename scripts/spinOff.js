@@ -82,7 +82,9 @@ spinOffs.forEach(([
     },
   );
 
-  customConfig.build();
+  customConfig.build({
+    destination,
+  });
 
   if (fs.existsSync(resolve(destination, platform))) {
     run(`CAPACITOR_SPINOFF=${id} npx cap sync ${platform}`, {
