@@ -3,9 +3,6 @@ const {
   execSync, 
 } = require('child_process');
 const fs = require('fs');
-const {
-  basename,
-} = require('path');
 const glob = require('glob');
 const {
   resolve, 
@@ -142,15 +139,21 @@ function getCustomConfig(origin) {
   const config = customConfig.config || {};
   const spinOffs = customConfig.spinOffs || {};
   const destination = origin;
+
   const getOptions = (options = {}) => {
     const platform = process.env.CAPACITOR_PLATFORM_NAME;
     const live = process.env.CAPACITOR_LIVE === 'true';
     const spinOff = spinOffs[process.env.CAPACITOR_SPINOFF];
+    const capacitorConfig = getCapacitorConfig(origin, spinOff?.capacitorConfig);
 
     return {
       destination,
       ...options,
-      config,
+      config: {
+        ...config,
+        ...spinOff?.config,
+      },
+      capacitorConfig,
       origin,
       env: {
         platform,
@@ -172,16 +175,7 @@ function getCustomConfig(origin) {
     },
     getConfig(options = {}) {
       options = getOptions(options);
-      return customConfig.getConfig?.({
-        ...options,
-        config: {
-          ...options.config,
-          ...options.env?.spinOff?.config,
-        },
-      }) || {
-        ...config,
-        ...options.env?.spinOff?.config,
-      };
+      return customConfig.getConfig?.(options) || options.config;
     },
     callback(options = {}) {
       customConfig.callback?.(getOptions(options));
