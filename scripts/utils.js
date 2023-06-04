@@ -20,6 +20,10 @@ function subsitute(content, substitutions) {
         value,
       ],
     ) => {
+      if (!key.startsWith('$$')) {
+        return result;
+      }
+
       return result.replaceAll(key, value);
     },
     content,
