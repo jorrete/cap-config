@@ -63,7 +63,7 @@ function applyConfigTemplate(
   folders.forEach((folder) => {
     let relativePath = folder.replace(configDir, '').slice(1);
 
-    if (relativePath.startsWith(platform)) {
+    if (!relativePath.startsWith(platform)) {
       return;
     }
 
@@ -81,7 +81,7 @@ function applyConfigTemplate(
   files.forEach((file) => {
     const relativePath = file.replace(configDir, '').slice(1);
 
-    if (relativePath.startsWith(`${platform}/`)) {
+    if (!relativePath.startsWith(`${platform}/`)) {
       return;
     }
 
