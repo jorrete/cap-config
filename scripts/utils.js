@@ -105,6 +105,14 @@ function getCapacitorConfig(path) {
   return loadJsonFile(resolve(path, 'capacitor.config.json'));
 }
 
+function getSpinoff(path) {
+  try {
+    return loadJsonFile(resolve(path, 'spinOff.json'));
+  } catch (error) {
+    return null;
+  }
+}
+
 function requireSafe(path) {
   try {
     return require(path);
@@ -141,7 +149,7 @@ function getCustomConfig(origin) {
   const getOptions = (options = {}) => {
     const platform = process.env.CAPACITOR_PLATFORM_NAME;
     const live = process.env.CAPACITOR_LIVE === 'true';
-    const spinOff = spinOffs[process.env.CAPACITOR_SPINOFF];
+    const spinOff = getSpinoff(origin);
     const capacitorConfig = getCapacitorConfig(origin, spinOff?.capacitorConfig);
 
     return {
@@ -169,7 +177,7 @@ function getCustomConfig(origin) {
     config,
     spinOffs,
     getSpinOffDirectory(destination, spinOff) {
-      return customConfig.getDestinationDirectory?.(destination, spinOff) || destination;
+      return customConfig.getSpinOffDirectory?.(destination, spinOff) || destination;
     },
     getConfig(options = {}) {
       options = getOptions(options);
@@ -244,7 +252,22 @@ function liveServer(path, port, status) {
   }
 }
 
+function getPlatform() {
+  return process.env.CAPACITOR_PLATFORM_NAME;
+}
+
+function isLive() {
+  return process.env.CAPACITOR_LIVE === 'true';
+}
+
+function isSpinoff() {
+  return false;
+}
+
 module.exports = {
+  getPlatform,
+  isLive,
+  isSpinoff,
   run,
   loadJsonFile,
   getCapacitorConfig,
@@ -254,4 +277,5 @@ module.exports = {
   updateCapacitorConfig,
   capacitorPlatform,
   liveServer,
+  getSpinoff,
 };

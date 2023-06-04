@@ -2,13 +2,15 @@
 const appRoot = require('app-root-path');
 const {
   getCustomConfig, 
+  getSpinoff,
+  isLive,
 } = require('./utils.js');
 
 appRoot.setPath(process.cwd());
 
 const customConfig = getCustomConfig(appRoot.path);
 
-if (process.env.CAPACITOR_SPINOFF || process.env.CAPACITOR_LIVE === 'true') {
+if (getSpinoff(appRoot.path) || isLive()) {
   process.exit(0);
 }
 

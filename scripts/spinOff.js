@@ -68,6 +68,12 @@ spinOffs.forEach(([
     );
   });
 
+  fs.writeFileSync(resolve(destination, 'spinOff.json'), JSON.stringify({
+    ...spinOff,
+    id,
+    root: appRoot.path,
+  }, null, 2));
+
   updateCapacitorConfig(
     destination,
     {
@@ -76,9 +82,7 @@ spinOffs.forEach(([
     },
   );
 
-  customConfig.build({
-    destination,
-  });
+  customConfig.build();
 
   if (fs.existsSync(resolve(destination, platform))) {
     run(`CAPACITOR_SPINOFF=${id} npx cap sync ${platform}`, {
