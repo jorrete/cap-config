@@ -21,6 +21,6 @@ if (customConfig.getLivePort) {
   liveServer(appRoot.path, customConfig.getLivePort(), live);
 }
 
-// customConfig.generateAssets();
+customConfig.generateAssets();
 
-// customConfig.callback();
+customConfig.callback();
