@@ -32,9 +32,9 @@ function subsitute(content, substitutions) {
   );
 }
 
-const excludeFromConfig = [
-  'capacitor.config.json',
-  'capacitor.custom.config.js',
+const platforms = [
+  'android',
+  'ios',
 ];
 
 function applyConfigTemplate(
@@ -69,7 +69,7 @@ function applyConfigTemplate(
   folders.forEach((folder) => {
     let relativePath = folder.replace(configDir, '').slice(1);
 
-    if (relativePath === 'config') {
+    if (!platforms.find((platform) => relativePath.startsWith(platform))) {
       return;
     }
 
@@ -85,16 +85,17 @@ function applyConfigTemplate(
   });
 
   files.forEach((file) => {
-    const relativePath = subsitute(resolve(path, file.replace(configDir, '').slice(1)), substitutions);
+    const relativePath = file.replace(configDir, '').slice(1);
 
-    if (excludeFromConfig.includes(basename(relativePath))) {
+    if (!platforms.find((platform) => relativePath.startsWith(`${platform}/`))) {
       return;
     }
 
     const content = fs.readFileSync(file, {
       encoding: 'utf8',
     });
-    fs.writeFileSync(relativePath, subsitute(content, substitutions));
+    const destinationPath = subsitute(resolve(path, relativePath), substitutions);
+    fs.writeFileSync(destinationPath, subsitute(content, substitutions));
   });
 
   log.logSuccess('cap config');

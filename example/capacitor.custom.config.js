@@ -4,7 +4,7 @@ const {
 
 module.exports = {
   config: {
-    'extra': 'cuesco',
+    'secret': 'cuesco',
   },
   getLivePort() {
     return 3333;
