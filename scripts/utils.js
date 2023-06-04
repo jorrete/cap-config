@@ -1,12 +1,17 @@
 #!/usr/bin/env node
-const { execSync } = require('child_process');
+const {
+  execSync, 
+} = require('child_process');
 const fs = require('fs');
 const glob = require('glob');
-const { resolve } = require('path');
+const {
+  resolve, 
+} = require('path');
 const log = require('@capacitor/cli/dist/log');
-const ip = require("ip");
+const ip = require('ip');
 
 function subsitute(content, substitutions) {
+  console.log(content, substitutions);
   return Object.entries(substitutions).reduce(
     (
       result,
@@ -54,19 +59,19 @@ function applyConfigTemplate(
   files.forEach((file) => {
     const relativePath = subsitute(resolve(path, file.replace(configDir, '').slice(1)), substitutions);
 
-    if (!fs.existsSync(relativePath)) {
-      const content = fs.readFileSync(file, {
-        encoding: 'utf8',
-      });
-      fs.writeFileSync(relativePath, subsitute(content, substitutions));
-    }
+    const content = fs.readFileSync(file, {
+      encoding: 'utf8',
+    });
+    fs.writeFileSync(relativePath, subsitute(content, substitutions));
   });
 
   log.logSuccess('cap config');
 }
 
 function loadJsonFile(path) {
-  return JSON.parse(fs.readFileSync(path, {encoding: 'utf8'}));
+  return JSON.parse(fs.readFileSync(path, {
+    encoding: 'utf8',
+  }));
 }
 
 function getCapacitorConfig(path) {
@@ -75,7 +80,7 @@ function getCapacitorConfig(path) {
 
 function requireSafe(path) {
   try {
-    return require(path)
+    return require(path);
   } catch (error) {
     return {};
   }
@@ -83,7 +88,7 @@ function requireSafe(path) {
 
 const capacitorPlatform = {
   'android': 'android/app/src/main/assets',
-}
+};
 
 function updateCapacitorConfig(destinationDir, customCapacitorConfig = {}) {
   const capacitorConfig = getCapacitorConfig(destinationDir);
@@ -95,7 +100,7 @@ function updateCapacitorConfig(destinationDir, customCapacitorConfig = {}) {
 
   fs.writeFileSync(capacitorConfigPath, JSON.stringify({
     ...capacitorConfig,
-    ...customCapacitorConfig
+    ...customCapacitorConfig,
   }, null, 2));
 }
 
@@ -166,7 +171,7 @@ function getCustomConfig(origin) {
 }
 
 function run(command, options = {}) {
-  const result = execSync(command, {
+  execSync(command, {
     ...options,
     stdio: 'inherit',
     env: {
@@ -187,20 +192,21 @@ function liveServer(path, port, status) {
     throw Error('Missing port');
   }
 
-
   if (status) {
     updateCapacitorConfig(resolve(path, capacitorPlatform[platform]), {
       server: {
         url: `http://${ip.address()}:${port}`,
-        cleartext: true
+        cleartext: true,
       },
     });
   }
 
   if (platform === 'android') {
     const manifest = resolve(path, 'android/app/src/main/AndroidManifest.xml');
-    let data = fs.readFileSync(manifest, {encoding: 'utf8'});
-    const fix = ' android:usesCleartextTraffic="true"'
+    let data = fs.readFileSync(manifest, {
+      encoding: 'utf8',
+    });
+    const fix = ' android:usesCleartextTraffic="true"';
 
     if (status && !data.includes(fix)) {
       data = data.replace('<application', `<application${fix}`);
@@ -224,4 +230,4 @@ module.exports = {
   updateCapacitorConfig,
   capacitorPlatform,
   liveServer,
-}
+};

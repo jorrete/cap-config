@@ -4,9 +4,9 @@ const {
 
 module.exports = {
   config: {
-    'APP_NAME': 'cuesco',
+    '$$appId': 'cuesco',
   },
-  getLivePort(options) {
+  getLivePort() {
     return 3333;
   },
   generateAssets(options) {
@@ -15,13 +15,16 @@ module.exports = {
       iconBackgroundColorDark: '#222222',
       splashBackgroundColor: '#eeeeee',
       splashBackgroundColorDark: '#111111',
-    }).map(([ key, value ]) => `--${key} '${value}'`).join(' ');
+    }).map(([
+      key,
+      value, 
+    ]) => `--${key} '${value}'`).join(' ');
 
     run(
       `npx @capacitor/assets generate --${options.env.platform} ${args}`,
       {
         cwd: options?.destination,
-      }
+      },
     );
   },
   build(options) {
@@ -33,23 +36,23 @@ module.exports = {
         'APP_NAME': 'farto',
       },
       capacitorConfig: {
-        "appId": "com.example.xxxxfarto",
-        "appName": "Vite!!",
-        "webDir": "dist",
-        "bundledWebRuntime": false,
-        "backgroundColor": "#8a1b1b",
-        "plugins": {
-          "Keyboard": {
-            "resize": "body",
-            "resizeOnFullScreen": true
-          }
+        'appId': 'com.example.xxxxfarto',
+        'appName': 'Vite!!',
+        'webDir': 'dist',
+        'bundledWebRuntime': false,
+        'backgroundColor': '#8a1b1b',
+        'plugins': {
+          'Keyboard': {
+            'resize': 'body',
+            'resizeOnFullScreen': true,
+          },
         },
-        "cordova": {
-          "preferences": {
-            "StatusBarBackgroundColor": "#8a1b1b"
-          }
-        }
+        'cordova': {
+          'preferences': {
+            'StatusBarBackgroundColor': '#8a1b1b',
+          },
+        },
       },
     },
   },
-}
+};

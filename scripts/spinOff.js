@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const appRoot = require('app-root-path');
-const { resolve } = require('path');
 const {
-  loadJsonFile,
-  getCapacitorConfig,
-  applyConfigTemplate,
+  resolve, 
+} = require('path');
+const {
   getCustomConfig,
   run,
   updateCapacitorConfig,
 } = require('./utils.js');
-const { reverse } = require('dns');
-const log = require('@capacitor/cli/dist/log');
-const [platform, spinOffId = null] = process.argv.slice(2);
+const [
+  platform,
+  spinOffId = null,
+] = process.argv.slice(2);
 
 if (!platform) {
   throw Error('Missing platform argument [android | ios]');
@@ -25,10 +25,12 @@ const customConfig = getCustomConfig(appRoot.path);
 const spinOffsDir = resolve(appRoot.path, 'spinOffs');
 
 if (!fs.existsSync(spinOffsDir)) {
-  fs.mkdirSync(spinOffsDir)
+  fs.mkdirSync(spinOffsDir);
 }
 
-const spinOffs = Object.entries(customConfig.spinOffs).filter(([id, spinOff]) =>  {
+const spinOffs = Object.entries(customConfig.spinOffs).filter(([
+  id,
+]) => {
   if (spinOffId) {
     return spinOffId === id;
   }
@@ -36,15 +38,14 @@ const spinOffs = Object.entries(customConfig.spinOffs).filter(([id, spinOff]) =>
   return true;
 });
 
-spinOffs.forEach(([ id, spinOff]) => {
+spinOffs.forEach(([
+  id,
+  spinOff,
+]) => {
   let destination =resolve(spinOffsDir, id);
 
-  spinOffDir = customConfig.getDestinationDirectory({
-    destination,
-  });
-
   if (!fs.existsSync(destination)) {
-    fs.mkdirSync(destination)
+    fs.mkdirSync(destination);
   }
 
   [
@@ -52,7 +53,7 @@ spinOffs.forEach(([ id, spinOff]) => {
     'resources',
     'package.json',
     'capacitor.config.json',
-    'capacitor.custom.config.js'
+    'capacitor.custom.config.js',
   ].forEach((path) => {
     fs.cpSync(
       appRoot.resolve(path),
@@ -67,7 +68,7 @@ spinOffs.forEach(([ id, spinOff]) => {
     destination,
     {
       ...spinOff?.capacitorConfig,
-    }
+    },
   );
 
   customConfig.build({
