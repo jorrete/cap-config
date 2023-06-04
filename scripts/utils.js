@@ -29,15 +29,12 @@ function subsitute(content, substitutions) {
   );
 }
 
-const platforms = [
-  'android',
-  'ios',
-];
-
 function applyConfigTemplate(
   path,
   substitutions,
 ) {
+
+  const platform = process.env.CAPACITOR_PLATFORM_NAME;
   const configDir = resolve(path, 'config');
   const capacitorConfig = getCapacitorConfig(path);
   substitutions = Object.fromEntries(
@@ -66,7 +63,7 @@ function applyConfigTemplate(
   folders.forEach((folder) => {
     let relativePath = folder.replace(configDir, '').slice(1);
 
-    if (!platforms.find((platform) => relativePath.startsWith(platform))) {
+    if (relativePath.startsWith(platform)) {
       return;
     }
 
@@ -84,7 +81,7 @@ function applyConfigTemplate(
   files.forEach((file) => {
     const relativePath = file.replace(configDir, '').slice(1);
 
-    if (!platforms.find((platform) => relativePath.startsWith(`${platform}/`))) {
+    if (relativePath.startsWith(`${platform}/`)) {
       return;
     }
 
