@@ -44,6 +44,7 @@ module.exports = {
         'mongo': 'farto',
       },
       capacitorConfig: {
+        'appId': 'foo.com',
         'appName': 'FARTO',
       },
     },

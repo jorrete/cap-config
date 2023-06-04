@@ -8,6 +8,7 @@ const {
   getCustomConfig,
   run,
   updateCapacitorConfig,
+  getCapacitorConfig,
 } = require('./utils.js');
 const [
   platform,
@@ -21,6 +22,7 @@ if (!platform) {
 appRoot.setPath(process.cwd());
 
 const customConfig = getCustomConfig(appRoot.path);
+const capacitorConfig = getCapacitorConfig(appRoot.path);
 
 const spinOffsDir = resolve(appRoot.path, 'spinOffs');
 
@@ -70,6 +72,7 @@ spinOffs.forEach(([
     destination,
     {
       ...spinOff?.capacitorConfig,
+      appId: spinOff?.capacitorConfig.appId || `${capacitorConfig.appId}.${id}`,
     },
   );
 

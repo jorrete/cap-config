@@ -171,6 +171,9 @@ function getCustomConfig(origin) {
     origin,
     config,
     spinOffs,
+    getSpinOffDirectory(destination, spinOff) {
+      return customConfig.getDestinationDirectory?.(destination, spinOff) || destination;
+    },
     getConfig(options = {}) {
       options = getOptions(options);
       return customConfig.getConfig?.(options) || options.config;
