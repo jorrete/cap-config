@@ -3,6 +3,9 @@ const {
   execSync, 
 } = require('child_process');
 const fs = require('fs');
+const {
+  basename,
+} = require('path');
 const glob = require('glob');
 const {
   resolve, 
@@ -29,6 +32,11 @@ function subsitute(content, substitutions) {
     content,
   );
 }
+
+const excludeFromConfig = [
+  'capacitor.config.json',
+  'capacitor.custom.config.js',
+];
 
 function applyConfigTemplate(
   path,
@@ -62,6 +70,10 @@ function applyConfigTemplate(
 
   files.forEach((file) => {
     const relativePath = subsitute(resolve(path, file.replace(configDir, '').slice(1)), substitutions);
+
+    if (excludeFromConfig.includes(basename(relativePath))) {
+      return;
+    }
 
     const content = fs.readFileSync(file, {
       encoding: 'utf8',
