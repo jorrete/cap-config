@@ -84,6 +84,7 @@ spinOffs.forEach(([
 
   customConfig.build({
     destination,
+    origin: destination,
   });
 
   if (fs.existsSync(resolve(destination, platform))) {

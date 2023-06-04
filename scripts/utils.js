@@ -149,18 +149,19 @@ function getCustomConfig(origin) {
   const getOptions = (options = {}) => {
     const platform = process.env.CAPACITOR_PLATFORM_NAME;
     const live = process.env.CAPACITOR_LIVE === 'true';
-    const spinOff = getSpinoff(origin);
+    const spinOff = getSpinoff(options.origin || origin);
     const capacitorConfig = getCapacitorConfig(origin, spinOff?.capacitorConfig);
 
     return {
       destination,
+      origin,
       ...options,
       config: {
         ...config,
         ...spinOff?.config,
       },
       capacitorConfig,
-      origin,
+      // origin,
       env: {
         platform,
         live,
