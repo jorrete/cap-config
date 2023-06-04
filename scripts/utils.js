@@ -14,7 +14,6 @@ const log = require('@capacitor/cli/dist/log');
 const ip = require('ip');
 
 function subsitute(content, substitutions) {
-  console.log(content, substitutions);
   return Object.entries(substitutions).reduce(
     (
       result,
@@ -43,6 +42,23 @@ function applyConfigTemplate(
   substitutions,
 ) {
   const configDir = resolve(path, 'config');
+  const capacitorConfig = getCapacitorConfig(path);
+  substitutions = Object.fromEntries(
+    [
+      ...Object.entries(capacitorConfig),
+      ...Object.entries(substitutions),
+    ]
+      .filter(([
+        , value,
+      ]) => typeof value !== 'object')
+      .map(([
+        key,
+        value,
+      ]) => [
+        `$$${key}`,
+        value,
+      ]),
+  );
 
   if (!fs.existsSync(configDir)) {
     return;
@@ -128,7 +144,7 @@ function getCustomConfig(origin) {
   const getOptions = (options = {}) => {
     const platform = process.env.CAPACITOR_PLATFORM_NAME;
     const live = process.env.CAPACITOR_LIVE === 'true';
-    const spinOff = spinOffs[process.env.SPINOFF];
+    const spinOff = spinOffs[process.env.CAPACITOR_SPINOFF];
 
     return {
       destination,
@@ -139,7 +155,7 @@ function getCustomConfig(origin) {
         platform,
         live,
         spinOff: spinOff ? {
-          id: process.env.SPINOFF,
+          id: process.env.CAPACITOR_SPINOFF,
           ...spinOff,
         } : null,
       },
@@ -154,17 +170,16 @@ function getCustomConfig(origin) {
       return customConfig.getDestinationDirectory?.(getOptions(options)) || options?.destination || destination;
     },
     getConfig(options = {}) {
-      const spinOff = spinOffs[process.env.SPINOFF] || null;
-
-      return customConfig.getConfig?.(getOptions({
+      options = getOptions(options);
+      return customConfig.getConfig?.({
         ...options,
         config: {
           ...options.config,
-          ...spinOff?.config,
+          ...options.env?.spinOff?.config,
         },
-      })) || {
+      }) || {
         ...config,
-        ...spinOff?.config,
+        ...options.env?.spinOff?.config,
       };
     },
     callback(options = {}) {

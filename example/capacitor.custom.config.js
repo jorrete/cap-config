@@ -4,7 +4,7 @@ const {
 
 module.exports = {
   config: {
-    '$$appId': 'cuesco',
+    'extra': 'cuesco',
   },
   getLivePort() {
     return 3333;
@@ -32,8 +32,12 @@ module.exports = {
   },
   spinOffs: {
     'test': {
+      data: {
+        path: '/home',
+      },
       config: {
-        'APP_NAME': 'farto',
+        'extra': 'cuesco2',
+        'mongo': 'farto',
       },
       capacitorConfig: {
         'appId': 'com.example.xxxxfarto',
