@@ -10,6 +10,8 @@ appRoot.setPath(process.cwd());
 
 const customConfig = getCustomConfig(appRoot.path);
 
+customConfig.generateAssets();
+
 applyConfigTemplate(
   appRoot.path,
   customConfig.getConfig(),
@@ -20,7 +22,5 @@ const live = process.env.CAPACITOR_LIVE === 'true';
 if (customConfig.getLivePort) {
   liveServer(appRoot.path, customConfig.getLivePort(), live);
 }
-
-customConfig.generateAssets();
 
 customConfig.callback();
