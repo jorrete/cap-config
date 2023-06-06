@@ -123,6 +123,7 @@ function requireSafe(path) {
 
 const capacitorPlatform = {
   'android': 'android/app/src/main/assets',
+  'ios': 'ios/App/App',
 };
 
 function updateCapacitorConfig(destinationDir, customCapacitorConfig = {}) {
