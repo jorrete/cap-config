@@ -9,6 +9,21 @@ const {
 } = require('path');
 const log = require('@capacitor/cli/dist/log');
 const ip = require('ip');
+const sharp = require('sharp');
+
+async function resizePNG({
+  path: origin,
+  dest,
+  size,
+  compressionLevel = 0,
+}) {
+  await sharp(origin)
+    .resize(size)
+    .png({
+      compressionLevel,
+    })
+    .toFile(dest);
+}
 
 function subsitute(content, substitutions) {
   return Object.entries(substitutions).reduce(
@@ -267,6 +282,7 @@ function isSpinoff() {
 }
 
 module.exports = {
+  resizePNG,
   getPlatform,
   isLive,
   isSpinoff,
