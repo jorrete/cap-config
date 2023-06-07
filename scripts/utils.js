@@ -192,7 +192,7 @@ function getCustomConfig(origin) {
       customConfig.build?.(getOptions(options));
     },
     generateAssets(options = {}) {
-      customConfig?.generateAssets(getOptions(options));
+      customConfig.generateAssets?.(getOptions(options));
     },
     getLivePort: (
       customConfig.getLivePort
