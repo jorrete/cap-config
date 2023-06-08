@@ -78,7 +78,7 @@ spinOffs.forEach(([
     destination,
     {
       ...spinOff?.capacitorConfig,
-      appId: spinOff?.capacitorConfig.appId || `${capacitorConfig.appId}.${id}`,
+      appId: spinOff?.capacitorConfig?.appId || `${capacitorConfig.appId}.${id}`,
     },
   );
 
