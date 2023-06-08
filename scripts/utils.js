@@ -31,17 +31,19 @@ function subsitute(content, substitutions) {
 }
 
 async function resizePNG({
-  path: origin,
+  src,
   dest,
   size,
   compressionLevel = 0,
 }) {
-  await sharp(origin)
+  await sharp(src)
     .resize(size)
     .png({
       compressionLevel,
     })
-    .toFile(dest);
+    .toBuffer(function(err, buffer) {
+      fs.writeFile(dest, buffer, () => {});
+    });
 }
 
 function applyConfigTemplate(
