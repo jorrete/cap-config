@@ -252,23 +252,23 @@ function liveServer(path, port, status) {
     });
   }
 
-  if (platform === 'android') {
-    const manifest = resolve(path, 'android/app/src/main/AndroidManifest.xml');
-    let data = fs.readFileSync(manifest, {
-      encoding: 'utf8',
-    });
-    const fix = ' android:usesCleartextTraffic="true"';
-
-    if (status && !data.includes(fix)) {
-      data = data.replace('<application', `<application${fix}`);
-    }
-
-    if (!status) {
-      data = data.replace(fix, '');
-    }
-
-    fs.writeFileSync(manifest, data);
-  }
+  // if (platform === 'android') {
+  //   const manifest = resolve(path, 'android/app/src/main/AndroidManifest.xml');
+  //   let data = fs.readFileSync(manifest, {
+  //     encoding: 'utf8',
+  //   });
+  //   const fix = ' android:usesCleartextTraffic="true"';
+  //
+  //   if (status && !data.includes(fix)) {
+  //     data = data.replace('<application', `<application${fix}`);
+  //   }
+  //
+  //   if (!status) {
+  //     data = data.replace(fix, '');
+  //   }
+  //
+  //   fs.writeFileSync(manifest, data);
+  // }
 }
 
 function getPlatform() {
