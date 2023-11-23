@@ -4,17 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "vite",
+    "android:spinoff": "npx cap-spinoff android",
+    "android:run": "npx cap run android",
+    "android:live": "CAPACITOR_LIVE=true npx cap run android",
     "capacitor:copy:before": "cap-copy-before",
     "capacitor:copy:after": "cap-copy-after"
   },
   "dependencies": {
-    "@capacitor/android": "^5.0.4",
-    "@capacitor/cli": "^5.0.4",
-    "@capacitor/core": "^5.0.4",
-    "@capacitor/ios": "^5.0.4",
-    "@capacitor/assets": "^2.0.4",
+    "@capacitor/android": "^5.5.1",
+    "@capacitor/assets": "^3.0.1",
+    "@capacitor/cli": "^5.5.1",
+    "@capacitor/core": "^5.5.1",
+    "@capacitor/ios": "^5.5.1",
     "cap-config": "../",
-    "vite": "^4.3.9"
+    "depcheck": "^1.4.7",
+    "npm-check-updates": "^16.14.11",
+    "vite": "^5.0.2"
   },
   "author": "",
   "license": "ISC"

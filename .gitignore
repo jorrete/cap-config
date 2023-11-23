@@ -1,5 +1,7 @@
 node_modules
 dist
 spinOffs
-**/android
-**/ios
+example/android
+example/spinOffs/**/android
+example/ios
+example/spinOffs/**/ios
