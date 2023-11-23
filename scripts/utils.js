@@ -134,7 +134,7 @@ function requireSafe(path) {
   try {
     return require(path);
   } catch (error) {
-    return {};
+    return;
   }
 }
 
@@ -158,7 +158,11 @@ function updateCapacitorConfig(destinationDir, customCapacitorConfig = {}) {
 }
 
 function getCustomConfig(origin) {
-  const customConfig = requireSafe(resolve(origin, 'capacitor.custom.config.js'));
+  const customConfig = (
+    requireSafe(resolve(origin, 'capacitor.custom.config.js'))
+      || requireSafe(resolve(origin, 'capacitor.custom.config.cjs'))
+      || {}
+  );
   const config = customConfig.config || {};
   const spinOffs = customConfig.spinOffs || {};
 
