@@ -226,6 +226,7 @@ function getCustomConfig(origin) {
 }
 
 function run(command, options = {}) {
+  console.log('[run]', command);
   execSync(command, {
     ...options,
     stdio: 'inherit',
