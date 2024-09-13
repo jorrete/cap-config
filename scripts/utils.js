@@ -1,15 +1,11 @@
 #!/usr/bin/env node
-const {
-  execSync, 
-} = require('child_process');
-const fs = require('fs');
-const glob = require('glob');
-const {
-  resolve, 
-} = require('path');
-const log = require('@capacitor/cli/dist/log');
-const ip = require('ip');
-const sharp = require('sharp');
+import log from '@capacitor/cli/dist/log.js';
+import { execSync } from 'child_process';
+import fs from 'fs';
+import { glob } from 'glob';
+import ip from 'ip';
+import { resolve } from 'path';
+import sharp from 'sharp';
 
 function subsitute(content, substitutions) {
   return Object.entries(substitutions).reduce(
@@ -31,10 +27,10 @@ function subsitute(content, substitutions) {
 }
 
 async function resizePNG({
-  src,
+  compressionLevel = 0,
   dest,
   size,
-  compressionLevel = 0,
+  src,
 }) {
   await sharp(src)
     .resize(size)
@@ -126,14 +122,17 @@ function getSpinoff(path) {
   try {
     return loadJsonFile(resolve(path, 'spinOff.json'));
   } catch (error) {
+    void error;
     return null;
   }
 }
 
-function requireSafe(path) {
+async function requireSafe(path) {
   try {
-    return require(path);
+    return await import(path);
   } catch (error) {
+    console.log(error);
+    void error;
     return;
   }
 }
@@ -157,10 +156,10 @@ function updateCapacitorConfig(destinationDir, customCapacitorConfig = {}) {
   }, null, 2));
 }
 
-function getCustomConfig(origin) {
+async function getCustomConfig(origin) {
   const customConfig = (
-    requireSafe(resolve(origin, 'capacitor.custom.config.js'))
-      || requireSafe(resolve(origin, 'capacitor.custom.config.cjs'))
+    (await requireSafe(resolve(origin, 'capacitor.custom.config.js')))?.default
+      || (await requireSafe(resolve(origin, 'capacitor.custom.config.cjs')))?.default
       || {}
   );
   const config = customConfig.config || {};
@@ -178,15 +177,15 @@ function getCustomConfig(origin) {
       destination,
       origin,
       ...options,
+      capacitorConfig,
       config: {
         ...config,
         ...spinOff?.config,
       },
-      capacitorConfig,
       // origin,
       env: {
-        platform,
         live,
+        platform,
         spinOff: spinOff ? {
           id: process.env.CAPACITOR_SPINOFF,
           ...spinOff,
@@ -196,24 +195,19 @@ function getCustomConfig(origin) {
   };
 
   return {
-    origin,
-    config,
-    spinOffs,
-    getSpinOffDirectory(destination, spinOff) {
-      return customConfig.getSpinOffDirectory?.(destination, spinOff) || destination;
-    },
-    getConfig(options = {}) {
-      options = getOptions(options);
-      return customConfig.getConfig?.(options) || options.config;
+    build(options = {}) {
+      customConfig.build?.(getOptions(options));
     },
     callback(options = {}) {
       customConfig.callback?.(getOptions(options));
     },
-    build(options = {}) {
-      customConfig.build?.(getOptions(options));
-    },
+    config,
     generateAssets(options = {}) {
       customConfig.generateAssets?.(getOptions(options));
+    },
+    getConfig(options = {}) {
+      options = getOptions(options);
+      return customConfig.getConfig?.(options) || options.config;
     },
     getLivePort: (
       customConfig.getLivePort
@@ -222,6 +216,11 @@ function getCustomConfig(origin) {
         }
         : undefined
     ),
+    getSpinOffDirectory(destination, spinOff) {
+      return customConfig.getSpinOffDirectory?.(destination, spinOff) || destination;
+    },
+    origin,
+    spinOffs,
   };
 }
 
@@ -229,11 +228,11 @@ function run(command, options = {}) {
   console.log('[run]', command);
   execSync(command, {
     ...options,
-    stdio: 'inherit',
     env: {
       ...process.env,
       ...options.env,
     },
+    stdio: 'inherit',
   });
 }
 
@@ -251,8 +250,8 @@ function liveServer(path, port, status) {
   if (status) {
     updateCapacitorConfig(resolve(path, capacitorPlatform[platform]), {
       server: {
-        url: `http://${ip.address()}:${port}`,
         cleartext: true,
+        url: `http://${ip.address()}:${port}`,
       },
     });
   }
@@ -288,19 +287,19 @@ function isSpinoff() {
   return false;
 }
 
-module.exports = {
-  resizePNG,
+export {
+  applyConfigTemplate,
+  capacitorPlatform,
+  getCapacitorConfig,
+  getCustomConfig,
   getPlatform,
+  getSpinoff,
   isLive,
   isSpinoff,
-  run,
-  loadJsonFile,
-  getCapacitorConfig,
-  applyConfigTemplate,
-  requireSafe,
-  getCustomConfig,
-  updateCapacitorConfig,
-  capacitorPlatform,
   liveServer,
-  getSpinoff,
+  loadJsonFile,
+  requireSafe,
+  resizePNG,
+  run,
+  updateCapacitorConfig,
 };

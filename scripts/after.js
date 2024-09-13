@@ -1,14 +1,11 @@
 #!/usr/bin/env node
-const appRoot = require('app-root-path');
-const {
-  applyConfigTemplate,
-  getCustomConfig,
-  liveServer,
-} = require('./utils.js');
+import appRoot from 'app-root-path';
+
+import { applyConfigTemplate, getCustomConfig, liveServer } from './utils.js';
 
 appRoot.setPath(process.cwd());
 
-const customConfig = getCustomConfig(appRoot.path);
+const customConfig = await getCustomConfig(appRoot.path);
 
 customConfig.generateAssets();
 

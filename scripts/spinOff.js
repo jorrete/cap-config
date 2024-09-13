@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const appRoot = require('app-root-path');
-const {
-  resolve, 
-} = require('path');
-const {
+import appRoot from 'app-root-path';
+import fs from 'fs';
+import { resolve } from 'path';
+
+import {
+  getCapacitorConfig,
   getCustomConfig,
   run,
   updateCapacitorConfig,
-  getCapacitorConfig,
-} = require('./utils.js');
+} from './utils.js';
+
 const [
   platform,
   spinOffId = null,
@@ -21,7 +21,8 @@ if (!platform) {
 
 appRoot.setPath(process.cwd());
 
-const customConfig = getCustomConfig(appRoot.path);
+const customConfig = await getCustomConfig(appRoot.path);
+
 const capacitorConfig = getCapacitorConfig(appRoot.path);
 
 const spinOffsDir = resolve(appRoot.path, 'spinOffs');

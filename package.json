@@ -1,28 +1,30 @@
 {
   "name": "cap-config",
   "version": "0.1.0",
+  "type": "module",
   "bin": {
-    "cap-copy-before": "./scripts/before.js",
-    "cap-copy-after": "./scripts/after.js",
+    "cap-config-before": "./scripts/before.js",
+    "cap-config-after": "./scripts/after.js",
     "cap-spinoff": "./scripts/spinOff.js"
   },
-  "_": {
-    "load-json-file": "^7.0.1"
+  "scripts": {
+    "eslint": "eslint",
+    "eslint-fix": "npm run eslint -- --fix"
   },
   "peerDependencies": {
     "@capacitor/cli": "*",
     "@capacitor/core": "*"
   },
   "devDependencies": {
-    "eslint": "^8.54.0",
-    "eslint-config-jorrodev": "git+ssh://git@github.com:jorrete/eslint-config-jorrodev.git#main.latest"
+    "eslint": "^9.10.0",
+    "npm-check-updates": "^17.1.1",
+    "jorrodev-env": "github:jorrete/jorrodev-env#main.latest"
   },
   "dependencies": {
     "app-root-path": "^3.1.0",
     "depcheck": "^1.4.7",
-    "glob": "^10.3.10",
-    "ip": "^1.1.8",
-    "npm-check-updates": "^16.14.11",
-    "sharp": "^0.32.6"
+    "glob": "^11.0.0",
+    "ip": "^2.0.1",
+    "sharp": "^0.33.5"
   }
 }

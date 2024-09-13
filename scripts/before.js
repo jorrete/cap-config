@@ -1,14 +1,11 @@
 #!/usr/bin/env node
-const appRoot = require('app-root-path');
-const {
-  getCustomConfig, 
-  getSpinoff,
-  isLive,
-} = require('./utils.js');
+import appRoot from 'app-root-path';
+
+import { getCustomConfig, getSpinoff, isLive } from './utils.js';
 
 appRoot.setPath(process.cwd());
 
-const customConfig = getCustomConfig(appRoot.path);
+const customConfig = await getCustomConfig(appRoot.path);
 
 if (getSpinoff(appRoot.path) || isLive()) {
   process.exit(0);

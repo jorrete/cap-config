@@ -1,13 +1,17 @@
-const {
-  run,
-} = require('cap-config/scripts/utils');
+//const {
+//  run,
+//} = require('cap-config/scripts/utils');
+import { run } from 'cap-config/scripts/utils.js';
 
-module.exports = {
+export default {
+  build(options) {
+    run(`npx vite build --emptyOutDir --outDir ${options.destination}/dist`);
+  },
+  callback(options) {
+    console.log(options);
+  },
   config: {
     'secret': 'cuesco',
-  },
-  getLivePort() {
-    return 3333;
   },
   generateAssets(options) {
     const args = Object.entries({
@@ -27,11 +31,8 @@ module.exports = {
       },
     );
   },
-  build(options) {
-    run(`npx vite build --emptyOutDir --outDir ${options.destination}/dist`);
-  },
-  callback(options) {
-    console.log(options);
+  getLivePort() {
+    return 3335;
   },
   getSpinOffDirectory(destination, spinOff) {
     void spinOff;
@@ -39,16 +40,16 @@ module.exports = {
   },
   spinOffs: {
     'test': {
-      data: {
-        path: '/home',
+      capacitorConfig: {
+        'appId': 'foo.com',
+        'appName': 'FARTO',
       },
       config: {
         'extra': 'cuesco2',
         'mongo': 'farto',
       },
-      capacitorConfig: {
-        'appId': 'foo.com',
-        'appName': 'FARTO',
+      data: {
+        path: '/home',
       },
     },
   },
