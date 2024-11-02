@@ -17,7 +17,12 @@ applyConfigTemplate(
 const live = process.env.CAPACITOR_LIVE === 'true';
 
 if (customConfig.getLivePort) {
-  liveServer(appRoot.path, customConfig.getLivePort(), live);
+  liveServer(
+    appRoot.path,
+    customConfig.getLivePort(),
+    customConfig.getLivePath(),
+    live,
+  );
 }
 
 customConfig.callback();

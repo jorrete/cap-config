@@ -209,6 +209,13 @@ async function getCustomConfig(origin) {
       options = getOptions(options);
       return customConfig.getConfig?.(options) || options.config;
     },
+    getLivePath: (
+      customConfig.getLivePath
+        ? (options = {}) => {
+          return customConfig?.getLivePath(getOptions(options));
+        }
+        : undefined
+    ),
     getLivePort: (
       customConfig.getLivePort
         ? (options = {}) => {
@@ -236,7 +243,12 @@ function run(command, options = {}) {
   });
 }
 
-function liveServer(path, port, status) {
+function liveServer(
+  filePath,
+  port,
+  urlPath,
+  status,
+) {
   const platform = process.env.CAPACITOR_PLATFORM_NAME;
 
   if (!platform) {
@@ -248,13 +260,14 @@ function liveServer(path, port, status) {
   }
 
   if (status) {
-    updateCapacitorConfig(resolve(path, capacitorPlatform[platform]), {
+    updateCapacitorConfig(resolve(filePath, capacitorPlatform[platform]), {
       server: {
+        url: `http://${ip.address()}:${port}${urlPath ? `${urlPath}` : ''}`,
         cleartext: true,
-        url: `http://${ip.address()}:${port}`,
       },
     });
   }
+  console.warn('Add android:usesCleartextTraffic="true" to android/app/src/main/AndroidManifest.xml');
 
   // if (platform === 'android') {
   //   const manifest = resolve(path, 'android/app/src/main/AndroidManifest.xml');
