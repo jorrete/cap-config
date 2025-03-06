@@ -7,41 +7,6 @@ import ip from 'ip';
 import { resolve } from 'path';
 import sharp from 'sharp';
 
-function subsitute(content, substitutions) {
-  return Object.entries(substitutions).reduce(
-    (
-      result,
-      [
-        key,
-        value,
-      ],
-    ) => {
-      if (!key.startsWith('$$')) {
-        return result;
-      }
-
-      return result.replaceAll(key, value);
-    },
-    content,
-  );
-}
-
-async function resizePNG({
-  compressionLevel = 0,
-  dest,
-  size,
-  src,
-}) {
-  await sharp(src)
-    .resize(size)
-    .png({
-      compressionLevel,
-    })
-    .toBuffer(function(err, buffer) {
-      fs.writeFile(dest, buffer, () => {});
-    });
-}
-
 function applyConfigTemplate(
   path,
   substitutions,
@@ -108,12 +73,6 @@ function applyConfigTemplate(
   log.logSuccess('cap config');
 }
 
-function loadJsonFile(path) {
-  return JSON.parse(fs.readFileSync(path, {
-    encoding: 'utf8',
-  }));
-}
-
 function getCapacitorConfig(path) {
   return loadJsonFile(resolve(path, 'capacitor.config.json'));
 }
@@ -127,6 +86,12 @@ function getSpinoff(path) {
   }
 }
 
+function loadJsonFile(path) {
+  return JSON.parse(fs.readFileSync(path, {
+    encoding: 'utf8',
+  }));
+}
+
 async function requireSafe(path) {
   try {
     return await import(path);
@@ -137,24 +102,45 @@ async function requireSafe(path) {
   }
 }
 
+async function resizePNG({
+  compressionLevel = 0,
+  dest,
+  size,
+  src,
+}) {
+  await sharp(src)
+    .resize(size)
+    .png({
+      compressionLevel,
+    })
+    .toBuffer(function(err, buffer) {
+      fs.writeFile(dest, buffer, () => {});
+    });
+}
+
+function subsitute(content, substitutions) {
+  return Object.entries(substitutions).reduce(
+    (
+      result,
+      [
+        key,
+        value,
+      ],
+    ) => {
+      if (!key.startsWith('$$')) {
+        return result;
+      }
+
+      return result.replaceAll(key, value);
+    },
+    content,
+  );
+}
+
 const capacitorPlatform = {
   'android': 'android/app/src/main/assets',
   'ios': 'ios/App/App',
 };
-
-function updateCapacitorConfig(destinationDir, customCapacitorConfig = {}) {
-  const capacitorConfig = getCapacitorConfig(destinationDir);
-
-  const capacitorConfigPath = resolve(
-    destinationDir,
-    'capacitor.config.json',
-  );
-
-  fs.writeFileSync(capacitorConfigPath, JSON.stringify({
-    ...capacitorConfig,
-    ...customCapacitorConfig,
-  }, null, 2));
-}
 
 async function getCustomConfig(origin) {
   const customConfig = (
@@ -214,14 +200,14 @@ async function getCustomConfig(origin) {
         ? (options = {}) => {
           return customConfig?.getLivePath(getOptions(options));
         }
-        : undefined
+        : () => undefined
     ),
     getLivePort: (
       customConfig.getLivePort
         ? (options = {}) => {
           return customConfig?.getLivePort(getOptions(options));
         }
-        : undefined
+        : () => undefined
     ),
     getSpinOffDirectory(destination, spinOff) {
       return customConfig.getSpinOffDirectory?.(destination, spinOff) || destination;
@@ -231,16 +217,16 @@ async function getCustomConfig(origin) {
   };
 }
 
-function run(command, options = {}) {
-  console.log('[run]', command);
-  execSync(command, {
-    ...options,
-    env: {
-      ...process.env,
-      ...options.env,
-    },
-    stdio: 'inherit',
-  });
+function getPlatform() {
+  return process.env.CAPACITOR_PLATFORM_NAME;
+}
+
+function isLive() {
+  return process.env.CAPACITOR_LIVE === 'true';
+}
+
+function isSpinoff() {
+  return false;
 }
 
 function liveServer(
@@ -262,8 +248,8 @@ function liveServer(
   if (status) {
     updateCapacitorConfig(resolve(filePath, capacitorPlatform[platform]), {
       server: {
-        url: `http://${ip.address()}:${port}${urlPath ? `${urlPath}` : ''}`,
         cleartext: true,
+        url: `http://${ip.address()}:${port}${urlPath ? `${urlPath}` : ''}`,
       },
     });
   }
@@ -288,16 +274,30 @@ function liveServer(
   // }
 }
 
-function getPlatform() {
-  return process.env.CAPACITOR_PLATFORM_NAME;
+function run(command, options = {}) {
+  console.log('[run]', command);
+  execSync(command, {
+    ...options,
+    env: {
+      ...process.env,
+      ...options.env,
+    },
+    stdio: 'inherit',
+  });
 }
 
-function isLive() {
-  return process.env.CAPACITOR_LIVE === 'true';
-}
+function updateCapacitorConfig(destinationDir, customCapacitorConfig = {}) {
+  const capacitorConfig = getCapacitorConfig(destinationDir);
 
-function isSpinoff() {
-  return false;
+  const capacitorConfigPath = resolve(
+    destinationDir,
+    'capacitor.config.json',
+  );
+
+  fs.writeFileSync(capacitorConfigPath, JSON.stringify({
+    ...capacitorConfig,
+    ...customCapacitorConfig,
+  }, null, 2));
 }
 
 export {

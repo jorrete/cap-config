@@ -16,14 +16,15 @@
     "@capacitor/core": "*"
   },
   "devDependencies": {
-    "eslint": "^9.10.0",
-    "npm-check-updates": "^17.1.1",
+    "eslint": "^9.21.0",
+    "npm-check-updates": "^17.1.15",
+    "globals": "^15.13.0",
     "jorrodev-env": "github:jorrete/jorrodev-env#main.latest"
   },
   "dependencies": {
     "app-root-path": "^3.1.0",
     "depcheck": "^1.4.7",
-    "glob": "^11.0.0",
+    "glob": "^11.0.1",
     "ip": "^2.0.1",
     "sharp": "^0.33.5"
   }
