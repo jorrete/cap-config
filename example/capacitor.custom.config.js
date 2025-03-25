@@ -38,7 +38,7 @@ export default {
     void spinOff;
     return destination + '/deploy';
   },
-  spinOffs() {
+  async spinOffs() {
     return {
       'test': {
         capacitorConfig: {
