@@ -213,7 +213,7 @@ async function getCustomConfig(origin) {
       return customConfig.getSpinOffDirectory?.(destination, spinOff) || destination;
     },
     origin,
-    spinOffs,
+    spinOffs: typeof spinOffs === 'object' ? spinOffs : await spinOffs(),
   };
 }
 

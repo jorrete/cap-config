@@ -38,19 +38,36 @@ export default {
     void spinOff;
     return destination + '/deploy';
   },
-  spinOffs: {
-    'test': {
-      capacitorConfig: {
-        'appId': 'foo.com',
-        'appName': 'FARTO',
+  spinOffs() {
+    return {
+      'test': {
+        capacitorConfig: {
+          'appId': 'foo.com',
+          'appName': 'FARTO',
+        },
+        config: {
+          'extra': 'cuesco2',
+          'mongo': 'farto',
+        },
+        data: {
+          path: '/home',
+        },
       },
-      config: {
-        'extra': 'cuesco2',
-        'mongo': 'farto',
-      },
-      data: {
-        path: '/home',
-      },
-    },
+    };
   },
+  //spinOffs: {
+  //  'test': {
+  //    capacitorConfig: {
+  //      'appId': 'foo.com',
+  //      'appName': 'FARTO',
+  //    },
+  //    config: {
+  //      'extra': 'cuesco2',
+  //      'mongo': 'farto',
+  //    },
+  //    data: {
+  //      path: '/home',
+  //    },
+  //  },
+  //},
 };
